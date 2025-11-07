@@ -1,4 +1,4 @@
-.PHONY: help install setup config-db start dev build prod test clean seed docker-up docker-down logs migration-generate migration-run migration-revert
+.PHONY: help install setup config-db start dev stop build prod test clean seed docker-up docker-down logs migration-generate migration-run migration-revert
 
 # Variáveis
 NODE_ENV ?= development
@@ -89,6 +89,10 @@ start: ## Iniciar aplicação em modo de desenvolvimento (hot-reload)
 	@npm run start:dev
 
 dev: start ## Alias para 'start'
+
+stop: ## Parar aplicação (mata processo na porta configurada)
+	@echo "$(YELLOW)🛑 Parando aplicação...$(NC)"
+	@lsof -ti :$(PORT) | xargs kill -9 2>/dev/null && echo "$(GREEN)✅ Aplicação parada!$(NC)" || echo "$(YELLOW)⚠️  Nenhum processo encontrado na porta $(PORT)$(NC)"
 
 build: ## Compilar aplicação para produção
 	@echo "$(GREEN)🏗️  Compilando aplicação...$(NC)"
