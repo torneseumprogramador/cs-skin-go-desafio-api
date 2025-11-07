@@ -8,3 +8,4 @@ export interface IInventoryRepository {
   delete(item: InventoryItem): Promise<void>;
 }
 
+

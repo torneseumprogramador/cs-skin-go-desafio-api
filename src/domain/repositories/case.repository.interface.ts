@@ -8,3 +8,4 @@ export interface ICaseRepository {
   findSkinsByCaseId(caseId: string): Promise<Skin[]>;
 }
 
+
