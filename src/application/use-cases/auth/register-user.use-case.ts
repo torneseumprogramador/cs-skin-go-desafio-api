@@ -1,10 +1,13 @@
-import { Injectable, ConflictException, BadRequestException } from '@nestjs/common';
+import { Injectable, ConflictException, BadRequestException, Inject } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { IUserRepository } from '../../../domain/repositories/user.repository.interface';
 
 @Injectable()
 export class RegisterUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject('IUserRepository')
+    private readonly userRepository: IUserRepository,
+  ) {}
 
   async execute(name: string, email: string, password: string) {
     // Verificar se email já existe

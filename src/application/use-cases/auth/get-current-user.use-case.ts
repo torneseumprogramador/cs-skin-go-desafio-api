@@ -1,9 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { IUserRepository } from '../../../domain/repositories/user.repository.interface';
 
 @Injectable()
 export class GetCurrentUserUseCase {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject('IUserRepository')
+    private readonly userRepository: IUserRepository,
+  ) {}
 
   async execute(userId: string) {
     const user = await this.userRepository.findById(userId);

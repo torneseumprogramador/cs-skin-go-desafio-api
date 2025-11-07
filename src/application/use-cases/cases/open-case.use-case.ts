@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
+import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ICaseRepository } from '../../../domain/repositories/case.repository.interface';
 import { IUserRepository } from '../../../domain/repositories/user.repository.interface';
@@ -9,10 +10,15 @@ import { Skin } from '../../../domain/entities/skin.entity';
 @Injectable()
 export class OpenCaseUseCase {
   constructor(
+    @Inject('ICaseRepository')
     private readonly caseRepository: ICaseRepository,
+    @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
+    @Inject('IInventoryRepository')
     private readonly inventoryRepository: IInventoryRepository,
+    @Inject('ITransactionRepository')
     private readonly transactionRepository: ITransactionRepository,
+    @InjectDataSource()
     private readonly dataSource: DataSource,
   ) {}
 

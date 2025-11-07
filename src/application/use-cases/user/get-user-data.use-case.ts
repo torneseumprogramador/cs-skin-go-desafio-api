@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { IUserRepository } from '../../../domain/repositories/user.repository.interface';
 import { IInventoryRepository } from '../../../domain/repositories/inventory.repository.interface';
 import { ITransactionRepository } from '../../../domain/repositories/transaction.repository.interface';
@@ -6,8 +6,11 @@ import { ITransactionRepository } from '../../../domain/repositories/transaction
 @Injectable()
 export class GetUserDataUseCase {
   constructor(
+    @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
+    @Inject('IInventoryRepository')
     private readonly inventoryRepository: IInventoryRepository,
+    @Inject('ITransactionRepository')
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 

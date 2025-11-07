@@ -1,9 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { ICaseRepository } from '../../../domain/repositories/case.repository.interface';
 
 @Injectable()
 export class GetCaseDetailsUseCase {
-  constructor(private readonly caseRepository: ICaseRepository) {}
+  constructor(
+    @Inject('ICaseRepository')
+    private readonly caseRepository: ICaseRepository,
+  ) {}
 
   async execute(id: string) {
     const caseEntity = await this.caseRepository.findByIdWithSkins(id);

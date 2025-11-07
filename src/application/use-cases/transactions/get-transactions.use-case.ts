@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ITransactionRepository } from '../../../domain/repositories/transaction.repository.interface';
 
 @Injectable()
 export class GetTransactionsUseCase {
-  constructor(private readonly transactionRepository: ITransactionRepository) {}
+  constructor(
+    @Inject('ITransactionRepository')
+    private readonly transactionRepository: ITransactionRepository,
+  ) {}
 
   async execute(userId: string, type?: string, limit = 50, offset = 0) {
     const [transactions, total] = await this.transactionRepository.findByUserId(

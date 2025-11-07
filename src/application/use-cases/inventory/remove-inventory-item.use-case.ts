@@ -1,9 +1,12 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, Inject } from '@nestjs/common';
 import { IInventoryRepository } from '../../../domain/repositories/inventory.repository.interface';
 
 @Injectable()
 export class RemoveInventoryItemUseCase {
-  constructor(private readonly inventoryRepository: IInventoryRepository) {}
+  constructor(
+    @Inject('IInventoryRepository')
+    private readonly inventoryRepository: IInventoryRepository,
+  ) {}
 
   async execute(userId: string, itemId: string) {
     const item = await this.inventoryRepository.findById(itemId);

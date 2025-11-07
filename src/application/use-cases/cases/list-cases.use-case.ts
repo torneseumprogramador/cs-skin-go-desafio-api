@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ICaseRepository } from '../../../domain/repositories/case.repository.interface';
 
 @Injectable()
 export class ListCasesUseCase {
-  constructor(private readonly caseRepository: ICaseRepository) {}
+  constructor(
+    @Inject('ICaseRepository')
+    private readonly caseRepository: ICaseRepository,
+  ) {}
 
   async execute() {
     const cases = await this.caseRepository.findAll();

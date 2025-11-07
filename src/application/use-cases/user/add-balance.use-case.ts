@@ -1,11 +1,13 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, Inject } from '@nestjs/common';
 import { IUserRepository } from '../../../domain/repositories/user.repository.interface';
 import { ITransactionRepository } from '../../../domain/repositories/transaction.repository.interface';
 
 @Injectable()
 export class AddBalanceUseCase {
   constructor(
+    @Inject('IUserRepository')
     private readonly userRepository: IUserRepository,
+    @Inject('ITransactionRepository')
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 

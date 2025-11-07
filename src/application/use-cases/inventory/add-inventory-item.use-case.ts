@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { IInventoryRepository } from '../../../domain/repositories/inventory.repository.interface';
 
 export interface AddInventoryItemDto {
@@ -12,7 +12,10 @@ export interface AddInventoryItemDto {
 
 @Injectable()
 export class AddInventoryItemUseCase {
-  constructor(private readonly inventoryRepository: IInventoryRepository) {}
+  constructor(
+    @Inject('IInventoryRepository')
+    private readonly inventoryRepository: IInventoryRepository,
+  ) {}
 
   async execute(userId: string, data: AddInventoryItemDto) {
     const item = await this.inventoryRepository.create({

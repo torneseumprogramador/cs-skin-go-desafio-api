@@ -134,6 +134,8 @@ const useCases = [
     CaseRepository,
     InventoryRepository,
     TransactionRepository,
+    // Repository providers (for dependency injection)
+    ...repositories,
     // Use Cases
     ...useCases,
     // Strategies

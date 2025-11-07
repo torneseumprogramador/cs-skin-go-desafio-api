@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { IInventoryRepository } from '../../../domain/repositories/inventory.repository.interface';
 
 @Injectable()
 export class GetInventoryUseCase {
-  constructor(private readonly inventoryRepository: IInventoryRepository) {}
+  constructor(
+    @Inject('IInventoryRepository')
+    private readonly inventoryRepository: IInventoryRepository,
+  ) {}
 
   async execute(userId: string, sortBy = 'date', order: 'ASC' | 'DESC' = 'DESC', rarity?: string) {
     const inventory = await this.inventoryRepository.findByUserId(userId, sortBy, order, rarity);
