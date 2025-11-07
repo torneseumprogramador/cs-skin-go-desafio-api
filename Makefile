@@ -1,4 +1,4 @@
-.PHONY: help install setup config-db start dev build prod test clean seed docker-up docker-down logs
+.PHONY: help install setup config-db start dev build prod test clean seed docker-up docker-down logs migration-generate migration-run migration-revert
 
 # Variáveis
 NODE_ENV ?= development
@@ -55,6 +55,16 @@ seed: ## Executar seeds (popular banco com dados iniciais)
 	@npm run seed
 	@echo "$(GREEN)✅ Seeds executados com sucesso!$(NC)"
 
+migration-generate: ## Gerar nova migration (use: make migration-generate NAME=NomeDaMigration)
+	@echo "$(GREEN)📝 Gerando migration...$(NC)"
+	@if [ -z "$(NAME)" ]; then \
+		echo "$(RED)❌ Erro: Nome da migration é obrigatório$(NC)"; \
+		echo "$(YELLOW)Uso: make migration-generate NAME=NomeDaMigration$(NC)"; \
+		exit 1; \
+	fi
+	@npm run typeorm -- migration:generate -d src/database/data-source.ts src/database/migrations/$(NAME)
+	@echo "$(GREEN)✅ Migration gerada!$(NC)"
+
 migration-run: ## Executar migrations pendentes
 	@echo "$(GREEN)🔄 Executando migrations...$(NC)"
 	@npm run migration:run
@@ -65,10 +75,11 @@ migration-revert: ## Reverter última migration
 	@npm run migration:revert
 	@echo "$(GREEN)✅ Migration revertida!$(NC)"
 
-db-reset: ## Resetar banco (recriar + seeds)
+db-reset: ## Resetar banco (recriar + migrations + seeds)
 	@echo "$(RED)⚠️  Resetando banco de dados...$(NC)"
 	@mysql -u root -p -e "DROP DATABASE IF EXISTS cs_skin_go; CREATE DATABASE cs_skin_go CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 	@echo "$(GREEN)✅ Banco recriado!$(NC)"
+	@$(MAKE) migration-run
 	@$(MAKE) seed
 
 ##@ Desenvolvimento
@@ -218,7 +229,7 @@ docs: ## Abrir documentação Swagger no navegador
 
 ##@ Workflows Comuns
 
-first-run: setup config-db seed start ## Primeiro uso: setup + criar DB + seeds + iniciar
+first-run: setup config-db migration-run seed start ## Primeiro uso: setup + criar DB + migrations + seeds + iniciar
 	@echo "$(GREEN)🎉 Aplicação configurada e rodando!$(NC)"
 
 restart: ## Reiniciar aplicação

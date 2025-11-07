@@ -30,8 +30,8 @@ async function runSeeds() {
 
     // Limpar dados existentes (opcional)
     console.log('🗑️  Limpando dados existentes...');
-    await skinRepository.delete({});
-    await caseRepository.delete({});
+    await skinRepository.clear();
+    await caseRepository.clear();
 
     // Inserir cases e skins
     console.log('📦 Inserindo cases e skins...');
