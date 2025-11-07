@@ -11,7 +11,9 @@ async function bootstrap() {
 
   // Configuração global do prefixo da API
   const apiPrefix = process.env.API_PREFIX || 'api';
-  app.setGlobalPrefix(apiPrefix);
+  app.setGlobalPrefix(apiPrefix, {
+    exclude: ['/'],
+  });
 
   // Segurança
   app.use(helmet());
@@ -57,6 +59,7 @@ async function bootstrap() {
 
   console.log(`🚀 API rodando em: http://localhost:${port}/${apiPrefix}`);
   console.log(`📖 Documentação Swagger: http://localhost:${port}/${apiPrefix}/docs`);
+  console.log(`ℹ️  Informações do sistema: http://localhost:${port}/`);
 }
 
 bootstrap();

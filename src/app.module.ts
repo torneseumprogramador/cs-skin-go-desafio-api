@@ -45,6 +45,7 @@ import { RemoveInventoryItemUseCase } from './application/use-cases/inventory/re
 import { GetTransactionsUseCase } from './application/use-cases/transactions/get-transactions.use-case';
 
 // Controllers
+import { HomeController } from './presentation/controllers/home.controller';
 import { AuthController } from './presentation/controllers/auth.controller';
 import { CasesController } from './presentation/controllers/cases.controller';
 import { UserController } from './presentation/controllers/user.controller';
@@ -126,7 +127,7 @@ const useCases = [
     }),
   ],
 
-  controllers: [AuthController, CasesController, UserController],
+  controllers: [HomeController, AuthController, CasesController, UserController],
 
   providers: [
     // Repositories (concrete implementations)
