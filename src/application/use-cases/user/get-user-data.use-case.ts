@@ -15,10 +15,15 @@ export class GetUserDataUseCase {
   ) {}
 
   async execute(userId: string) {
-    const userData = await this.userRepository.findUserDataByUserId(userId);
+    let userData = await this.userRepository.findUserDataByUserId(userId);
 
+    // Se não existir, criar automaticamente com saldo 0
     if (!userData) {
-      throw new NotFoundException('Dados do usuário não encontrados');
+      console.log(`[GET USER DATA] Criando UserData para usuário ${userId}`);
+      userData = await this.userRepository.createUserData({
+        userId,
+        balance: 0,
+      });
     }
 
     const inventory = await this.inventoryRepository.findByUserId(userId);
