@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { Case } from '../../domain/entities/case.entity';
 import { Skin } from '../../domain/entities/skin.entity';
 import { User } from '../../domain/entities/user.entity';
+import { UserData } from '../../domain/entities/user-data.entity';
 import { casesSeedData } from './cases-seed.data';
 import { defaultUserSeed, hashPassword } from './user-seed.data';
 
@@ -19,7 +20,7 @@ async function runSeeds() {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [Case, Skin, User],
+    entities: [Case, Skin, User, UserData],
     synchronize: false,
   });
 
@@ -28,6 +29,7 @@ async function runSeeds() {
     console.log('✅ Conexão com banco estabelecida');
 
     const userRepository = dataSource.getRepository(User);
+    const userDataRepository = dataSource.getRepository(UserData);
     const caseRepository = dataSource.getRepository(Case);
     const skinRepository = dataSource.getRepository(Skin);
 
@@ -40,11 +42,11 @@ async function runSeeds() {
     console.log('👤 Inserindo usuário padrão...');
     
     // Verificar se o usuário já existe
-    const existingUser = await userRepository.findOne({ where: { email: defaultUserSeed.email } });
+    let user = await userRepository.findOne({ where: { email: defaultUserSeed.email } });
     
-    if (!existingUser) {
+    if (!user) {
       const hashedPassword = await hashPassword(defaultUserSeed.password);
-      const user = userRepository.create({
+      user = userRepository.create({
         name: defaultUserSeed.name,
         email: defaultUserSeed.email,
         password: hashedPassword,
@@ -53,6 +55,19 @@ async function runSeeds() {
       console.log(`   ✓ Usuário "${user.email}" criado`);
     } else {
       console.log(`   ℹ️  Usuário "${defaultUserSeed.email}" já existe`);
+    }
+
+    // Criar UserData para o usuário (se não existir)
+    const existingUserData = await userDataRepository.findOne({ where: { userId: user.id } });
+    if (!existingUserData) {
+      const userData = userDataRepository.create({
+        userId: user.id,
+        balance: 0,
+      });
+      await userDataRepository.save(userData);
+      console.log(`   ✓ UserData criado para "${user.email}" com saldo R$ 0,00`);
+    } else {
+      console.log(`   ℹ️  UserData já existe para "${user.email}"`);
     }
 
     // Inserir cases e skins
