@@ -49,6 +49,7 @@ import { HomeController } from './presentation/controllers/home.controller';
 import { AuthController } from './presentation/controllers/auth.controller';
 import { CasesController } from './presentation/controllers/cases.controller';
 import { UserController } from './presentation/controllers/user.controller';
+import { HealthController } from './presentation/controllers/health.controller';
 
 // Strategies
 import { JwtStrategy } from './presentation/strategies/jwt.strategy';
@@ -127,7 +128,7 @@ const useCases = [
     }),
   ],
 
-  controllers: [HomeController, AuthController, CasesController, UserController],
+  controllers: [HomeController, AuthController, CasesController, UserController, HealthController],
 
   providers: [
     // Repositories (concrete implementations)
