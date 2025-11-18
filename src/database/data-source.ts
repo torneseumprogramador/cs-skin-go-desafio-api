@@ -1,10 +1,14 @@
 import { DataSource } from 'typeorm';
+import { config } from 'dotenv';
 import { User } from '../domain/entities/user.entity';
 import { UserData } from '../domain/entities/user-data.entity';
 import { Case } from '../domain/entities/case.entity';
 import { Skin } from '../domain/entities/skin.entity';
 import { InventoryItem } from '../domain/entities/inventory-item.entity';
 import { Transaction } from '../domain/entities/transaction.entity';
+
+// Carrega variáveis de ambiente a partir do .env da pasta do backend
+config();
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
